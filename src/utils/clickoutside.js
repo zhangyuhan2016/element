@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import { on } from 'element-ui/src/utils/dom';
+import { calcShadowRootEvent } from 'element-ui/src/utils/util';
 
 const nodeList = [];
 const ctx = '@@clickoutsideContext';
@@ -15,16 +16,25 @@ let seed = 0;
 
 function createDocumentHandler(el, binding, vnode) {
   return function(mouseup = {}, mousedown = {}) {
+    const event = {
+      mouseup: {
+        target: calcShadowRootEvent(mouseup)
+      },
+      mousedown: {
+        target: calcShadowRootEvent(mousedown)
+      }
+    };
+
     if (!vnode ||
       !vnode.context ||
-      !mouseup.target ||
-      !mousedown.target ||
-      el.contains(mouseup.target) ||
-      el.contains(mousedown.target) ||
-      el === mouseup.target ||
+      !event.mouseup.target ||
+      !event.mousedown.target ||
+      el.contains(event.mouseup.target) ||
+      el.contains(event.mousedown.target) ||
+      el === event.mouseup.target ||
       (vnode.context.popperElm &&
-      (vnode.context.popperElm.contains(mouseup.target) ||
-      vnode.context.popperElm.contains(mousedown.target)))) return;
+      (vnode.context.popperElm.contains(event.mouseup.target) ||
+      vnode.context.popperElm.contains(event.mousedown.target)))) return;
 
     if (binding.expression &&
       el[ctx].methodName &&

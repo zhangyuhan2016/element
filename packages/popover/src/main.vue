@@ -27,7 +27,7 @@
 import Popper from 'element-ui/src/utils/vue-popper';
 import { on, off } from 'element-ui/src/utils/dom';
 import { addClass, removeClass } from 'element-ui/src/utils/dom';
-import { generateId } from 'element-ui/src/utils/util';
+import { generateId, calcShadowRootEvent } from 'element-ui/src/utils/util';
 
 export default {
   name: 'ElPopover',
@@ -197,12 +197,14 @@ export default {
       if (!reference && this.$refs.wrapper.children) {
         reference = this.referenceElm = this.$refs.wrapper.children[0];
       }
+
+      const event = calcShadowRootEvent(e);
       if (!this.$el ||
         !reference ||
-        this.$el.contains(e.target) ||
-        reference.contains(e.target) ||
+        this.$el.contains(event) ||
+        reference.contains(event) ||
         !popper ||
-        popper.contains(e.target)) return;
+        popper.contains(event)) return;
       this.showPopper = false;
     },
     handleAfterEnter() {

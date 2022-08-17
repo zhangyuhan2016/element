@@ -1057,7 +1057,7 @@
             return element;
         }
 
-        if (parent === root.document) {
+        if (parent === root.document || element.nodeType === 11) {
             // Firefox puts the scrollTOp value on `documentElement` instead of `body`, we then check which of them is
             // greater than 0 and return the proper element
             if (root.document.body.scrollTop || root.document.body.scrollLeft) {
@@ -1090,7 +1090,7 @@
      * @returns {Boolean} answer to "isFixed?"
      */
     function isFixed(element) {
-        if (element === root.document.body) {
+        if (element === root.document.body || element.nodeType === 11) {
             return false;
         }
         if (getStyleComputedProperty(element, 'position') === 'fixed') {

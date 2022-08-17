@@ -239,3 +239,11 @@ export function objToArray(obj) {
   }
   return isEmpty(obj) ? [] : [obj];
 }
+
+export function calcShadowRootEvent(e) {
+  let event = e.target;
+  if (e.target.shadowRoot && e.target.shadowRoot.toString() === '[object ShadowRoot]') {
+    event = e.composedPath()[0];
+  }
+  return event;
+}
