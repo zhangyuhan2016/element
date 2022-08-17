@@ -241,9 +241,14 @@ export function objToArray(obj) {
 }
 
 export function calcShadowRootEvent(e) {
+  if (!e) return;
   let event = e.target;
   if (e.target.shadowRoot && e.target.shadowRoot.toString() === '[object ShadowRoot]') {
-    event = e.composedPath()[0];
+    let eventPath = e.composedPath();
+    if (!eventPath.length) {
+      eventPath = e.path;
+    }
+    event = eventPath[0];
   }
   return event;
 }
